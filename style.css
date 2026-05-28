@@ -1,0 +1,103 @@
+/* --- 基础重置与全局样式 --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* 天空蓝到薰衣草的渐变背景 */
+    background: linear-gradient(to bottom right, #87CEEB, #E6E6FA);
+    height: 100vh; display: flex; justify-content: center; align-items: center;
+    overflow: hidden; color: #333;
+}
+
+.game-container {
+    width: 90%; max-width: 900px; text-align: center; position: relative;
+}
+
+/* --- 控制面板样式 --- */
+.controls-panel {
+    background: rgba(255,255,255,0.8); padding: 15px 20px; border-radius: 15px;
+    margin-bottom: 30px; display: flex; flex-wrap: wrap; 
+    justify-content: space-between; align-items: center; gap: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+h1 { font-size: 1.5rem; color: #4a4a8a; }
+.settings, .buttons { display: flex; align-items: center; gap: 10px; }
+input[type="number"] { width: 60px; padding: 5px; border-radius: 5px; border: 1px solid #ccc; }
+button {
+    padding: 8px 15px; border: none; border-radius: 20px; cursor: pointer;
+    font-weight: bold; transition: transform 0.2s, opacity 0.2s;
+}
+button:hover { transform: scale(1.05); }
+button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+#resetBtn { background-color: #ff9c6e; color: #fff; }
+#autoSolveBtn { background-color: #59b1ff; color: #fff; }
+
+/* --- 3D 游戏棋盘核心 --- */
+.game-board {
+    display: flex; justify-content: space-around; align-items: flex-end;
+    height: 350px; padding: 20px;
+    /* 关键：开启 3D 透视效果 */
+    perspective: 800px; 
+    transform-style: preserve-3d;
+}
+
+.peg-wrapper {
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+    width: 30%; height: 100%; position: relative; cursor: pointer;
+}
+.peg-label { margin-top: 10px; font-weight: bold; color: #555; }
+
+/* 木质/金属质感的柱子 */
+.peg {
+    width: 20px; height: 220px; 
+    background: linear-gradient(to right, #8B4513, #D2691E, #8B4513);
+    border-radius: 10px 10px 0 0; position: relative; z-index: 1;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    transform: translateZ(0); /* 确保在3D空间中正确渲染 */
+}
+
+/* --- 盘子样式 (彩虹色 + 3D厚度感) --- */
+.disk {
+    height: 25px; border-radius: 12px; position: absolute;
+    /* 通过 CSS 变量控制宽度 */
+    width: calc(var(--size) * 20px + 40px); 
+    bottom: 0; left: 50%; transform: translateX(-50%) translateZ(5px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2), inset 0 -4px 0 rgba(0,0,0,0.2);
+    transition: all 0.3s ease; cursor: pointer;
+}
+.disk.selected { filter: brightness(1.2); transform: translateX(-50%) translateZ(20px) translateY(-15px); }
+
+/* 盘子颜色映射 */
+.disk[data-color="1"] { background: linear-gradient(to bottom, #ff6b6b, #ee5a5a); }
+.disk[data-color="2"] { background: linear-gradient(to bottom, #ff9c6e, #e68a5e); }
+.disk[data-color="3"] { background: linear-gradient(to bottom, #e7d558, #d1bf4c); }
+.disk[data-color="4"] { background: linear-gradient(to bottom, #bae637, #a6cf2f); }
+.disk[data-color="5"] { background: linear-gradient(to bottom, #36cfc9, #2ebcb6); }
+.disk[data-color="6"] { background: linear-gradient(to bottom, #59b1ff, #4a9ce6); }
+.disk[data-color="7"] { background: linear-gradient(to bottom, #997feb, #866dd4); }
+.disk[data-color="8"] { background: linear-gradient(to bottom, #c186e0, #ab76c7); }
+
+/* --- 警告与胜利动画 --- */
+.warning-box {
+    position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);
+    background: #ff4d4f; color: white; padding: 8px 20px; border-radius: 20px;
+    font-weight: bold; opacity: 0; transition: opacity 0.3s;
+}
+.warning-box.show { opacity: 1; animation: shakeWarning 0.5s ease; }
+.hidden { display: none !important; }
+
+@keyframes shakeWarning {
+    0%, 100% { transform: translateX(-50%); }
+    25% { transform: translateX(calc(-50% - 8px)); }
+    75% { transform: translateX(calc(-50% + 8px)); }
+}
+
+.victory-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+    z-index: 100;
+}
+.victory-content {
+    background: white; padding: 40px; border-radius: 20px; text-align: center;
+    animation: glowWin 1.5s infinite alternate;
+}
+@keyframes glowWin { from { box-shadow: 0 0 10px gold; } to { box-shadow: 0 0 30px gold; } }
