@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tower of Hanoi · 3D Learning Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 游戏主容器 -->
+    <div class="game-container">
+        <!-- 顶部控制面板 -->
+        <header class="controls-panel">
+            <h1>🏯 Tower of Hanoi</h1>
+            
+            <div class="settings">
+                <label for="diskCountInput">Disks:</label>
+                <input type="number" id="diskCountInput" min="3" max="8" value="5">
+                
+                <div class="stats">Moves: <span id="moveCounter">0</span></div>
+            </div>
+
+            <div class="buttons">
+                <button id="resetBtn">Reset</button>
+                <button id="autoSolveBtn">Auto Solve</button>
+            </div>
+        </header>
+
+        <!-- 3D 游戏棋盘区域 -->
+        <main class="game-board">
+            <!-- 柱子 A -->
+            <div class="peg-wrapper" data-peg="0">
+                <div class="peg"></div>
+                <div class="peg-label">Peg A</div>
+                <!-- 盘子将通过 JS 动态生成在这里 -->
+            </div>
+            
+            <!-- 柱子 B -->
+            <div class="peg-wrapper" data-peg="1">
+                <div class="peg"></div>
+                <div class="peg-label">Peg B</div>
+            </div>
+            
+            <!-- 柱子 C -->
+            <div class="peg-wrapper" data-peg="2">
+                <div class="peg"></div>
+                <div class="peg-label">Peg C</div>
+            </div>
+        </main>
+
+        <!-- 警告提示框 -->
+        <div id="warningMsg" class="warning-box hidden"></div>
+        
+        <!-- 胜利弹窗 -->
+        <div id="victoryOverlay" class="victory-overlay hidden">
+            <div class="victory-content">
+                <h2>🎉 Congratulations!</h2>
+                <p>You solved the puzzle in <span id="finalMoves">0</span> moves!</p>
+                <button id="playAgainBtn">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
